@@ -4,12 +4,12 @@
     android:id="@+id/activity_manage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/back_main"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/back_main"
     tools:context="com.example.puma.assigment3.ManageActivity">
 
 
@@ -39,102 +39,161 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <Button
+                android:id="@+id/rightBtn"
                 android:layout_width="35dp"
                 android:layout_height="40dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:text="r" />
+                android:background="@drawable/r"
+                android:text=" " />
+
+            <Space
+                android:layout_width="2dp"
+                android:layout_height="match_parent" />
 
             <Button
+                android:id="@+id/leftBtn"
                 android:layout_width="35dp"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/l"
+                android:text=" " />
+
+            <Space
+                android:layout_width="2dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/downBtn"
+                android:layout_width="35dp"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/d"
+                android:text=" " />
+
+            <Space
+                android:layout_width="2dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/upBtn"
+                android:layout_width="35dp"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/u"
+                android:text=" " />
+
+            <Space
+                android:layout_width="2dp"
+                android:layout_height="match_parent" />
+            />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/Btn3"
+                android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:text="l" />
-
-
-            <Button
-                android:layout_width="35dp"
-                android:layout_height="40dp"
-                android:text="u" />
+                android:background="@drawable/p3" />
 
             <Button
-                android:layout_width="35dp"
-                android:layout_height="40dp"
-                android:text="d" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Button
+                android:id="@+id/Btn2"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/p1" />
-
-            <Button
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
                 android:background="@drawable/p2" />
 
             <Button
+                android:id="@+id/Btn1"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/p3" />
-        </LinearLayout>
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="29dp"
+                android:layout_marginRight="29dp"
+                android:background="@drawable/p1" />
+        </RelativeLayout>
 
-        <LinearLayout
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="5dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
 
             <Button
+                android:id="@+id/Btn4"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/p4" />
 
             <Button
+                android:id="@+id/Btn6"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/p5" />
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/p6" />
 
             <Button
+                android:id="@+id/Btn5"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/p6" />
-        </LinearLayout>
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/p5" />
+        </RelativeLayout>
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/Btn7"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/p7" />
 
             <Button
+                android:id="@+id/Btn9"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/p8" />
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/p9" />
 
             <Button
+                android:id="@+id/Btn8"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/p9" />
-        </LinearLayout>
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/p8" />
+        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
