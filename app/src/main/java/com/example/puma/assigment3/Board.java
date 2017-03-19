@@ -45,7 +45,7 @@ public class Board {
         this.length = length;
     }
 
-    public boolean run(ImageView train, List<Direction> instructions) {
+    public boolean run(ImageView train, List<String> instructions) {
         if (width == 0 || left == 0)
             throw new RuntimeException("Screen dimensions are not set");
 
