@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if (view.getId() == R.id.btn_start) {
-                Intent intent = new Intent(MainActivity.this, WorkingArea.class);
+                Intent intent = new Intent(MainActivity.this, ManageActivity.class);
                 startActivity(intent);
             }
         }
