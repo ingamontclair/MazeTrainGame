@@ -12,4 +12,9 @@
     android:background="@drawable/s101"
     tools:context="com.example.puma.assigment3.WorkingArea"
     >
+    <ImageView
+        android:id="@+id/train"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/train"/>
 </LinearLayout>
