@@ -6,17 +6,7 @@ import java.util.List;
 
 public class Board {
 
-    private int top;
-    private int left;
-    private int width;
-    private int length;
-
-    public Board(int boardResourceId, int[] startingPosition, int[] endPosition, int[][] map) {
-
-
-    }
-
-    public static Board MAP_1 = new Board(
+    public static final Board MAP_1 = new Board(
             R.drawable.s101,
             new int[]{0, 1},
             new int[]{7, 5},
@@ -29,6 +19,24 @@ public class Board {
                     {0, 0, 0, 0, 0, 0, 0, 0}
             }
     );
+
+    private int top;
+    private int left;
+    private int width;
+    private int length;
+
+    private int boardResouceId;
+    private int[] startingPosition;
+    private int[] endPosition;
+    private int[][] map;
+
+
+    public Board(int boardResouceId, int[] startingPosition, int[] endPosition, int[][] map) {
+        this.boardResouceId = boardResouceId;
+        this.startingPosition = startingPosition;
+        this.endPosition = endPosition;
+        this.map = map;
+    }
 
     public void setScreenDimensions(int top, int left, int width, int length) {
         this.top = top;

@@ -1,10 +1,8 @@
 package com.example.puma.assigment3;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ViewTreeObserver;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -17,8 +15,8 @@ public class WorkingArea extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_working_area);
 
-        ImageView train = (ImageView) findViewById( R.id.train );
-        final LinearLayout workingAreaView = (LinearLayout) findViewById( R.id.activity_working_area );
+        ImageView train = (ImageView) findViewById(R.id.train);
+        final LinearLayout workingAreaView = (LinearLayout) findViewById(R.id.activity_working_area);
         final int[] size = new int[2];
 
         ViewTreeObserver vto = workingAreaView.getViewTreeObserver();
@@ -26,7 +24,7 @@ public class WorkingArea extends AppCompatActivity {
             @Override
             public void onGlobalLayout() {
                 workingAreaView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                size[0]  = workingAreaView.getMeasuredWidth();
+                size[0] = workingAreaView.getMeasuredWidth();
                 size[1] = workingAreaView.getMeasuredHeight();
             }
         });
