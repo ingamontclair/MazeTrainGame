@@ -17,25 +17,11 @@ public class WorkingArea extends AppCompatActivity {
 
         ImageView train = (ImageView) findViewById(R.id.train);
         final LinearLayout workingAreaView = (LinearLayout) findViewById(R.id.activity_working_area);
-        final int[] size = new int[2];
-
-        //get play area length and width
-        ViewTreeObserver vto = workingAreaView.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                workingAreaView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                size[0] = workingAreaView.getMeasuredWidth();
-                size[1] = workingAreaView.getMeasuredHeight();
-            }
-        });
 
         Board b = Board.MAP_1;
-        b.setScreenDimensions(workingAreaView.getTop(), workingAreaView.getLeft(), size[0], size[1]);
+        b.setWorkingArea(workingAreaView);
 
-
-        boolean result = b.run(train, Arrays.asList(Direction.RIGHT, Direction.DOWN, Direction.RIGHT));
-
+        boolean result = b.run(train, Arrays.asList(Direction.RIGHT.name(), Direction.DOWN.name(), Direction.RIGHT.name()));
         System.out.println("Finished: " + result);
 
     }
