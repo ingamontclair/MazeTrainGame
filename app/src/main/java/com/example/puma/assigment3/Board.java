@@ -1,6 +1,8 @@
 package com.example.puma.assigment3;
 
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class Board {
     private int[] startingPosition;
     private int[] endPosition;
     private int[][] map;
+    private LinearLayout workingArea;
 
 
     public Board(int boardResouceId, int[] startingPosition, int[] endPosition, int[][] map) {
@@ -52,4 +55,24 @@ public class Board {
         return true;
     }
 
+    public void setWorkingArea(final LinearLayout workingAreaView) {
+
+        this.workingArea = workingAreaView;
+
+        final int[] size = new int[2];
+
+        //get play area length and width
+        ViewTreeObserver vto = workingAreaView.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                workingAreaView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                size[0] = workingAreaView.getMeasuredWidth();
+                size[1] = workingAreaView.getMeasuredHeight();
+            }
+        });
+
+        setScreenDimensions(workingAreaView.getTop(), workingAreaView.getLeft(), size[0], size[1]);
+        workingAreaView.setBackgroundResource(boardResouceId);
+    }
 }
