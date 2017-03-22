@@ -20,7 +20,10 @@
         <activity
             android:name=".WorkingArea"
             android:screenOrientation="landscape" />
-        <activity android:name=".ManageActivity" android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".ManageActivity"
+            android:screenOrientation="landscape" />
+        <activity android:name=".SelectLevel"></activity>
     </application>
 
 </manifest>
