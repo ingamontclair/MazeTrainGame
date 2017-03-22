@@ -24,12 +24,14 @@
             android:orientation="horizontal">
 
             <Button
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:id="@+id/btn_small_menu"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:text="S" />
+                android:background="@drawable/menu_small"
+                 />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -179,7 +181,7 @@
                 android:id="@+id/Btn7"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/p7" />
+                android:background="@color/colorPrimary" />
 
             <Button
                 android:id="@+id/Btn9"
@@ -188,7 +190,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:background="@drawable/p9" />
+                android:background="@color/colorPrimary" />
 
             <Button
                 android:id="@+id/Btn8"
@@ -196,13 +198,17 @@
                 android:layout_height="40dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/p8" />
+                android:background="@color/colorPrimary" />
         </RelativeLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            />
         <Button
             android:id="@+id/btnPlay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Play"
+            android:layout_height="35dp"
+            android:background="@drawable/play"
             />
     </LinearLayout>
 

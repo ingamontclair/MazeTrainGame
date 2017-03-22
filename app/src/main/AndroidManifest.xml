@@ -18,9 +18,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".WorkingArea"
-            android:screenOrientation="landscape" />
-        <activity
             android:name=".ManageActivity"
             android:screenOrientation="landscape" />
         <activity android:name=".SelectLevel"

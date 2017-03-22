@@ -27,7 +27,7 @@ public class BoardConfiguration {
     );
 
     public static final BoardConfiguration MAP_2 = new BoardConfiguration(
-            R.drawable.s101,
+            R.drawable.s102,
             Direction.RIGHT,
             new int[]{1, 1},
             new int[]{7, 5},

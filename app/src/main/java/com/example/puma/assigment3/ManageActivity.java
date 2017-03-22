@@ -25,12 +25,12 @@ import java.util.LinkedList;
 public class ManageActivity extends AppCompatActivity {
     StartDraggingLsntr myStartDraggingLsnr;
     EndDraggingLsntr myEndDraggingLsntr;
-    private Button btn_Play;
+    private Button btn_Play, btn_SmallMenu;
     private Board board = null;
     private boolean result;
     private String currentBoard="";
     private RelativeLayout workingArea;
-    MediaPlayer backgroundMusic;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +40,7 @@ public class ManageActivity extends AppCompatActivity {
         workingArea = (RelativeLayout) findViewById(R.id.ll_working_area);
         Intent selectLevel= getIntent();
         Bundle bundle = selectLevel.getExtras();
-        backgroundMusic = MediaPlayer.create(ManageActivity.this, R.raw.oceanwavescrushing);
-        backgroundMusic.setLooping(true);
-        //backgroundMusic.setVolume(10.0f, 3.0f);
-        backgroundMusic.start();
+
 
         myStartDraggingLsnr=new StartDraggingLsntr();
         myEndDraggingLsntr=new EndDraggingLsntr();
@@ -75,9 +72,10 @@ public class ManageActivity extends AppCompatActivity {
         findViewById(R.id.Btn6).setOnDragListener(myEndDraggingLsntr);
         findViewById(R.id.Btn7).setOnDragListener(myEndDraggingLsntr);
         findViewById(R.id.Btn8).setOnDragListener(myEndDraggingLsntr);
-
+        btn_SmallMenu =(Button)findViewById(R.id.btn_small_menu);
         btn_Play = (Button)findViewById(R.id.btnPlay);
         btn_Play.setOnClickListener(new PlayLstr());
+        btn_SmallMenu.setOnClickListener(new SmallMenuLstr());
     }
 
 
@@ -153,8 +151,8 @@ public class ManageActivity extends AppCompatActivity {
                 //Toast.makeText(ManageActivity.this, description, Toast.LENGTH_SHORT).show();
 
                 //run the train
-                boolean result = board.run((ImageView) findViewById(R.id.train), sequence);
-
+                //boolean result = board.run((ImageView) findViewById(R.id.train), sequence);
+                result=true;
                 CustomDialogClass cdd=new CustomDialogClass(ManageActivity.this);
                 cdd.show();
 
@@ -233,6 +231,17 @@ public class ManageActivity extends AppCompatActivity {
                     break;
             }
             dismiss();
+        }
+    }
+
+    class SmallMenuLstr implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            if (view.getId() == R.id.btn_small_menu){
+                Intent intent;
+                intent = new Intent(ManageActivity.this, SelectLevel.class);
+                startActivity(intent);
+            }
         }
     }
 }
