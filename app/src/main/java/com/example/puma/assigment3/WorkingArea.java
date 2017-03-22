@@ -2,9 +2,12 @@ package com.example.puma.assigment3;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import java.util.Arrays;
 
@@ -15,14 +18,19 @@ public class WorkingArea extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_working_area);
 
-        ImageView train = (ImageView) findViewById(R.id.train);
-        final LinearLayout workingAreaView = (LinearLayout) findViewById(R.id.activity_working_area);
 
-        Board b = Board.MAP_1;
-        b.setWorkingArea(workingAreaView);
+        final ImageView train = (ImageView) findViewById(R.id.train);
+        final RelativeLayout workingAreaView = (RelativeLayout) findViewById(R.id.board);
 
-        boolean result = b.run(train, Arrays.asList(Direction.RIGHT.name(), Direction.DOWN.name(), Direction.RIGHT.name()));
-        System.out.println("Finished: " + result);
+        final Board b = new Board(BoardConfiguration.MAP_1, workingAreaView );
+
+        Button play = (Button) findViewById(R.id.btnPlay);
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                b.run(train, Arrays.asList(Direction.RIGHT.name(), Direction.DOWN.name(), Direction.RIGHT.name()));
+            }
+        });
 
     }
 }
