@@ -15,10 +15,12 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public class ManageActivity extends AppCompatActivity {
     StartDraggingLsntr myStartDraggingLsnr;
@@ -27,7 +29,7 @@ public class ManageActivity extends AppCompatActivity {
     private Board board = null;
     private boolean result;
     private String currentBoard="";
-    private LinearLayout workingArea;
+    private RelativeLayout workingArea;
     MediaPlayer backgroundMusic;
 
     @Override
@@ -35,7 +37,7 @@ public class ManageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage);
 
-        workingArea = (LinearLayout) findViewById(R.id.ll_working_area);
+        workingArea = (RelativeLayout) findViewById(R.id.ll_working_area);
         Intent selectLevel= getIntent();
         Bundle bundle = selectLevel.getExtras();
         backgroundMusic = MediaPlayer.create(ManageActivity.this, R.raw.oceanwavescrushing);
@@ -45,19 +47,16 @@ public class ManageActivity extends AppCompatActivity {
 
         myStartDraggingLsnr=new StartDraggingLsntr();
         myEndDraggingLsntr=new EndDraggingLsntr();
-        if(bundle!=null)
-        {
-            String tmpMap =(String) bundle.get("mapToLoad");
-            if (tmpMap.equals("lev1s1")){
-                 board = Board.MAP_1;
+        if (bundle != null) {
+            String tmpMap = (String) bundle.get("mapToLoad");
+            if (tmpMap.equals("lev1s1")) {
+                board = new Board(BoardConfiguration.MAP_1, workingArea);
                 currentBoard = tmpMap;
-            }
-            else if (tmpMap.equals("lev1s2")){
-                 board = Board.MAP_2;
+            } else if (tmpMap.equals("lev1s2")) {
+                board = new Board(BoardConfiguration.MAP_2, workingArea);
                 currentBoard = tmpMap;
-            } else
-            if (tmpMap.equals("lev1s3")){
-                 board = Board.MAP_3;
+            } else if (tmpMap.equals("lev1s3")) {
+                board = new Board(BoardConfiguration.MAP_2, workingArea);
                 currentBoard = tmpMap;
             }
             board.setWorkingArea(workingArea);
@@ -130,7 +129,7 @@ public class ManageActivity extends AppCompatActivity {
             if (view.getId() == R.id.btnPlay) {
 // collect instructions
 
-                ArrayList sequence = new ArrayList<String>();
+                LinkedList<CharSequence > sequence = new LinkedList<CharSequence >();
                 String description;
                 description = "sequence: " + findViewById(R.id.Btn1).getContentDescription() + ", "
                         + findViewById(R.id.Btn2).getContentDescription() + ", "
@@ -141,22 +140,24 @@ public class ManageActivity extends AppCompatActivity {
                         + findViewById(R.id.Btn7).getContentDescription()+ ", "
                         + findViewById(R.id.Btn8).getContentDescription()+ ", "
                         + findViewById(R.id.Btn9).getContentDescription();
-/*                sequence.add(0,findViewById(R.id.Btn1).getContentDescription().toString());
-                sequence.add(1,findViewById(R.id.Btn2).getContentDescription().toString());
-                sequence.add(2,findViewById(R.id.Btn3).getContentDescription().toString());
-                sequence.add(4,findViewById(R.id.Btn4).getContentDescription().toString());
-                sequence.add(5,findViewById(R.id.Btn5).getContentDescription().toString());
-                sequence.add(6,findViewById(R.id.Btn6).getContentDescription().toString());
-                sequence.add(7,findViewById(R.id.Btn7).getContentDescription().toString());
-                sequence.add(8,findViewById(R.id.Btn8).getContentDescription().toString());
-                sequence.add(9,findViewById(R.id.Btn9).getContentDescription().toString());*/
+
+                sequence.add(findViewById(R.id.Btn1).getContentDescription());
+                sequence.add(findViewById(R.id.Btn2).getContentDescription());
+                sequence.add(findViewById(R.id.Btn3).getContentDescription());
+                sequence.add(findViewById(R.id.Btn4).getContentDescription());
+                sequence.add(findViewById(R.id.Btn5).getContentDescription());
+                sequence.add(findViewById(R.id.Btn6).getContentDescription());
+                sequence.add(findViewById(R.id.Btn7).getContentDescription());
+                sequence.add(findViewById(R.id.Btn8).getContentDescription());
+                sequence.add(findViewById(R.id.Btn9).getContentDescription());
                 //Toast.makeText(ManageActivity.this, description, Toast.LENGTH_SHORT).show();
-                //win window
-                result=true;
+
+                //run the train
+                boolean result = board.run((ImageView) findViewById(R.id.train), sequence);
+
                 CustomDialogClass cdd=new CustomDialogClass(ManageActivity.this);
                 cdd.show();
-                //run the train
-                //boolean result = board.run((ImageView) findViewById(R.id.train), Arrays.asList(Direction.RIGHT.name(), Direction.DOWN.name(), Direction.RIGHT.name()));
+
                 //System.out.println("Finished: " + result);
                 //Toast.makeText(ManageActivity.this, description, Toast.LENGTH_SHORT).show();
             }

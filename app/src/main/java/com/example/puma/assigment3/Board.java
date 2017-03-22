@@ -27,8 +27,7 @@ public class Board {
 
 
     private Direction movingDirection = null;
-    private Queue<Direction> instructions = new LinkedList<>(
-            Arrays.asList(Direction.RIGHT, Direction.DOWN, Direction.DOWN));
+    private Queue<Direction> instructions;
 
     public Board ( BoardConfiguration conf, RelativeLayout workingAreaView) {
         this.conf = conf;
@@ -58,16 +57,36 @@ public class Board {
         each instruction lasts until the next fork or turn
      */
 
-    public boolean run(ImageView train, List<String> instructions) {
+    public boolean run(ImageView train, List<CharSequence> instructions) {
 
         if (workingArea == null)
             throw new RuntimeException("Screen is not set");
+
+        assignInstructions(instructions);
 
         // show train at its starting position
         showStartingPosition(train);
 
         // move it
-        return nextMove(train);
+        boolean b = nextMove(train);
+
+        try {
+            Thread.sleep(30000);
+        } catch (InterruptedException e) {
+        }
+
+        return b;
+    }
+
+    private void assignInstructions(List<CharSequence> input) {
+        this.instructions = new LinkedList<>();
+
+        for (CharSequence c : input) {
+            if (c == null)
+                continue;
+
+            instructions.add(Direction.valueOf(c.toString().toUpperCase()));
+        }
     }
 
     private void showStartingPosition(ImageView train) {
@@ -90,47 +109,43 @@ public class Board {
     }
 
 
-    private boolean nextMove(final ImageView train){
+    private boolean nextMove(final ImageView train) {
 
-        if (Arrays.equals(conf.getEndPosition(), currentPosition)){
+        if (Arrays.equals(conf.getEndPosition(), currentPosition)) {
             //we have arrived to the finish
-            return  true;
+            return true;
         }
 
         //the first move
-        if (movingDirection == null){
+        if (movingDirection == null) {
             //if our instructions are empty we are done
             if (instructions.isEmpty()) {
                 return false;
-            }
-            else {
+            } else {
                 Direction d = instructions.remove();
-                if (checkDirection( d ) > 0 ){
+                if (checkDirection(d) > 0) {
                     //next move animation
                     movingDirection = d;
                     move(train, d);
-                }
-                else {
+                } else {
                     //todo: crash animation
-                    return  false;
+                    return false;
                 }
             }
         }
         // we are moving
         else {
             //check for turns
-            if ( conf.getMap()[currentPosition[1]][currentPosition[0]] > 1){
+            if (conf.getMap()[currentPosition[1]][currentPosition[0]] > 1) {
                 //it's a turn
                 Direction d = instructions.remove();
-                if (checkDirection(d) > 0){
+                if (checkDirection(d) > 0) {
                     move(train, d);
-                }
-                else {
+                } else {
                     //todo: crash animation
-                    return  false;
+                    return false;
                 }
-            }
-            else {
+            } else {
                 //keep moving
                 move(train, movingDirection);
             }
@@ -228,7 +243,6 @@ public class Board {
             );
             anim.start();
         }
-
     }
 
     private int checkDirection(Direction d) {
