@@ -207,7 +207,10 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_working_area"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/s101"></LinearLayout>
+        android:background="@drawable/s102">
+
+    </LinearLayout>
 </LinearLayout>
