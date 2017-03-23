@@ -108,11 +108,11 @@ public class Board {
 
         if (Direction.LEFT.equals(conf.getOrientation())){
             train.setRotation(-180f);
-            train.setX(currentPosition[0] * BASE_SQUARE_WIDTH + BASE_TRAIN_SIZE / 2 + BASE_BORDER_WIDTH);
+            train.setX((currentPosition[0] +1) * BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE / 2 + BASE_BORDER_WIDTH);
             train.setY(currentPosition[1] * BASE_SQUARE_HEIGHTS + BASE_BORDER_HEIGHTS);
         }
         if (Direction.RIGHT.equals(conf.getOrientation())) {
-            train.setX(currentPosition[0] * BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE / 2 - BASE_BORDER_WIDTH);
+            train.setX(currentPosition[0] * BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE / 2 + BASE_BORDER_WIDTH);
             train.setY(currentPosition[1] * BASE_SQUARE_HEIGHTS + BASE_BORDER_HEIGHTS);
         }
 
