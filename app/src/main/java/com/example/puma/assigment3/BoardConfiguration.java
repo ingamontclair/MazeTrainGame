@@ -33,7 +33,7 @@ public class BoardConfiguration {
             new int[]{6, 1},
             new int[][]{
                     {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 2, 1, 1, 1, 0},
+                    {0, 0, 0, 2, 1, 1, 1, 1},
                     {0, 0, 0, 1, 0, 0, 0, 0},
                     {0, 0, 0, 2, 1, 1, 2, 0},
                     {0, 0, 0, 0, 0, 0, 1, 1},
@@ -41,9 +41,25 @@ public class BoardConfiguration {
             }
     );
 
+    public static final BoardConfiguration MAP_3 = new BoardConfiguration(
+            R.drawable.s103,
+            Direction.LEFT,
+            new int[]{2, 5},
+            new int[]{4, 3},
+            new int[][]{
+                    {0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 2, 1, 1, 1, 2, 0, 0},
+                    {0, 1, 0, 0, 0, 1, 0, 0},
+                    {0, 2, 1, 1, 1, 1, 0, 0},
+                    {0, 2, 1, 1, 1, 2, 0, 0},
+                    {0, 2, 1, 1, 0, 0, 0, 0}
+            }
+    );
+
     // int[] size is to get the actual board size in px
-    // default height and width ( scales 1 ) is 1365 x 785 with the train 124x124
+    // default height and width ( scales 1 ) is 1365 x 785 with the train 124x124 (1920 × 1080 screen)
     // a square default size is 165 x 124
+    // todo: adjust the sizes for other resolutions
     public static final int BASE_SCREEN_WIDTH = 1365;
     public static final int BASE_SCREEN_HEIGHTS = 785;
     public static final int BASE_TRAIN_SIZE = 124;

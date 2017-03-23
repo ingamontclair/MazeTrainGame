@@ -53,7 +53,7 @@ public class ManageActivity extends AppCompatActivity {
                 board = new Board(BoardConfiguration.MAP_2, workingArea);
                 currentBoard = tmpMap;
             } else if (tmpMap.equals("lev1s3")) {
-                board = new Board(BoardConfiguration.MAP_2, workingArea);
+                board = new Board(BoardConfiguration.MAP_3, workingArea);
                 currentBoard = tmpMap;
             }
             board.setWorkingArea(workingArea);
@@ -156,13 +156,16 @@ public class ManageActivity extends AppCompatActivity {
 
                             @Override
                             public void onSuccess() {
+                                result = true;
                                 CustomDialogClass cdd=new CustomDialogClass(ManageActivity.this);
                                 cdd.show();
                             }
 
                             @Override
                             public void onCrash() {
-
+                                result = false;
+                                CustomDialogClass cdd=new CustomDialogClass(ManageActivity.this);
+                                cdd.show();
                             }
                         }
                 );

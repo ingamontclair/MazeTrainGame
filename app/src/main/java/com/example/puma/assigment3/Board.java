@@ -105,8 +105,16 @@ public class Board {
         train.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         currentPosition = Arrays.copyOf(conf.getStartingPosition(), 2);
-        train.setX(currentPosition[0] * BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE/2 + BASE_BORDER_WIDTH);
-        train.setY(currentPosition[1] * BASE_SQUARE_HEIGHTS + BASE_BORDER_HEIGHTS );
+
+        if (Direction.LEFT.equals(conf.getOrientation())){
+            train.setRotation(-180f);
+            train.setX(currentPosition[0] * BASE_SQUARE_WIDTH + BASE_TRAIN_SIZE / 2 + BASE_BORDER_WIDTH);
+            train.setY(currentPosition[1] * BASE_SQUARE_HEIGHTS + BASE_BORDER_HEIGHTS);
+        }
+        if (Direction.RIGHT.equals(conf.getOrientation())) {
+            train.setX(currentPosition[0] * BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE / 2 - BASE_BORDER_WIDTH);
+            train.setY(currentPosition[1] * BASE_SQUARE_HEIGHTS + BASE_BORDER_HEIGHTS);
+        }
 
         train.setVisibility(View.VISIBLE);
 
@@ -244,6 +252,17 @@ public class Board {
 
             turnAnimation(train, newDirection, valuesX, valuesY, rotation);
         }
+        else if (Direction.UP.equals(movingDirection) && Direction.RIGHT.equals(newDirection)){
+
+            float x = train.getX();
+            float y = train.getY();
+
+            float[] valuesX = {x, x + (BASE_TRAIN_SIZE / 2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE) / 2)};
+            float[] valuesY = {y, y - BASE_SQUARE_HEIGHTS / 2};
+            float[] rotation = {-90f, 0};
+
+            turnAnimation(train, newDirection, valuesX, valuesY, rotation);
+        }
         else if (Direction.UP.equals(movingDirection) && Direction.UP.equals(newDirection)){
 
             ObjectAnimator anim = ObjectAnimator.ofFloat(train, View.Y, train.getY(), train.getY() - BASE_SQUARE_HEIGHTS);
@@ -271,6 +290,28 @@ public class Board {
                              }
             );
             anim.start();
+        }
+        else if (Direction.LEFT.equals(movingDirection) && Direction.UP.equals(newDirection)){
+
+            float x = train.getX();
+            float y = train.getY();
+
+            float[] valuesX = {x, x - (BASE_TRAIN_SIZE / 2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE) / 2)};
+            float[] valuesY = {y, y - BASE_SQUARE_HEIGHTS / 2};
+            float[] rotation = {-180f, -90f};
+
+            turnAnimation(train, newDirection, valuesX, valuesY, rotation);
+        }
+        else if (Direction.LEFT.equals(movingDirection) && Direction.DOWN.equals(newDirection)){
+
+            float x = train.getX();
+            float y = train.getY();
+
+            float[] valuesX = {x, x - (BASE_TRAIN_SIZE / 2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE) / 2)};
+            float[] valuesY = {y, y + BASE_SQUARE_HEIGHTS / 2};
+            float[] rotation = {-180f, -270f};
+
+            turnAnimation(train, newDirection, valuesX, valuesY, rotation);
         }
 
     }
