@@ -21,7 +21,7 @@ public class BoardConfiguration {
                     {0, 1, 1, 2, 0, 0, 0, 0},
                     {0, 0, 0, 1, 0, 0, 0, 0},
                     {0, 0, 0, 1, 0, 0, 0, 0},
-                    {0, 0, 0, 2, 1, 1, 1, 0},
+                    {0, 0, 0, 2, 1, 1, 1, 1},
                     {0, 0, 0, 0, 0, 0, 0, 0}
             }
     );
@@ -29,15 +29,15 @@ public class BoardConfiguration {
     public static final BoardConfiguration MAP_2 = new BoardConfiguration(
             R.drawable.s102,
             Direction.RIGHT,
-            new int[]{1, 1},
-            new int[]{7, 5},
+            new int[]{2, 5},
+            new int[]{6, 1},
             new int[][]{
                     {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 1, 1, 2, 0, 0, 0, 0},
+                    {0, 0, 0, 2, 1, 1, 1, 0},
                     {0, 0, 0, 1, 0, 0, 0, 0},
-                    {0, 0, 0, 1, 0, 0, 0, 0},
-                    {0, 0, 0, 2, 1, 1, 1, 1},
-                    {0, 0, 0, 0, 0, 0, 0, 0}
+                    {0, 0, 0, 2, 1, 1, 2, 0},
+                    {0, 0, 0, 0, 0, 0, 1, 1},
+                    {0, 1, 1, 1, 1, 1, 2, 0}
             }
     );
 

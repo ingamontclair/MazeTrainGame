@@ -150,14 +150,24 @@ public class ManageActivity extends AppCompatActivity {
                 sequence.add(findViewById(R.id.Btn9).getContentDescription());
                 //Toast.makeText(ManageActivity.this, description, Toast.LENGTH_SHORT).show();
 
-                //run the train
-                //boolean result = board.run((ImageView) findViewById(R.id.train), sequence);
-                result=true;
-                CustomDialogClass cdd=new CustomDialogClass(ManageActivity.this);
-                cdd.show();
+                //start the train run
+                board.setTrainCrashListener(
+                        new TrainCrashListener(){
 
-                //System.out.println("Finished: " + result);
-                //Toast.makeText(ManageActivity.this, description, Toast.LENGTH_SHORT).show();
+                            @Override
+                            public void onSuccess() {
+                                CustomDialogClass cdd=new CustomDialogClass(ManageActivity.this);
+                                cdd.show();
+                            }
+
+                            @Override
+                            public void onCrash() {
+
+                            }
+                        }
+                );
+
+                board.run((ImageView) findViewById(R.id.train), sequence);
             }
         }
     }

@@ -14,7 +14,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import static com.example.puma.assigment3.BoardConfiguration.*;
+import static com.example.puma.assigment3.BoardConfiguration.BASE_BORDER_HEIGHTS;
+import static com.example.puma.assigment3.BoardConfiguration.BASE_BORDER_WIDTH;
+import static com.example.puma.assigment3.BoardConfiguration.BASE_SQUARE_HEIGHTS;
+import static com.example.puma.assigment3.BoardConfiguration.BASE_SQUARE_WIDTH;
+import static com.example.puma.assigment3.BoardConfiguration.BASE_TRAIN_SIZE;
 
 public class Board {
 
@@ -28,6 +32,7 @@ public class Board {
 
     private Direction movingDirection = null;
     private Queue<Direction> instructions;
+    private TrainCrashListener trainCrashListener;
 
     public Board ( BoardConfiguration conf, RelativeLayout workingAreaView) {
         this.conf = conf;
@@ -53,14 +58,21 @@ public class Board {
         workingAreaView.setBackgroundResource(conf.getBoardResouceId());
     }
 
+    public void setTrainCrashListener(TrainCrashListener trainCrashListener) {
+        this.trainCrashListener = trainCrashListener;
+    }
+
     /*
         each instruction lasts until the next fork or turn
      */
 
-    public boolean run(ImageView train, List<CharSequence> instructions) {
+    public void run(ImageView train, List<CharSequence> instructions) {
 
         if (workingArea == null)
             throw new RuntimeException("Screen is not set");
+
+        if (trainCrashListener == null)
+            throw new RuntimeException("Result listener is not set");
 
         assignInstructions(instructions);
 
@@ -68,14 +80,8 @@ public class Board {
         showStartingPosition(train);
 
         // move it
-        boolean b = nextMove(train);
+        nextMove(train);
 
-        try {
-            Thread.sleep(30000);
-        } catch (InterruptedException e) {
-        }
-
-        return b;
     }
 
     private void assignInstructions(List<CharSequence> input) {
@@ -109,18 +115,19 @@ public class Board {
     }
 
 
-    private boolean nextMove(final ImageView train) {
+    private void nextMove(final ImageView train) {
 
         if (Arrays.equals(conf.getEndPosition(), currentPosition)) {
             //we have arrived to the finish
-            return true;
+            trainCrashListener.onSuccess();
+            return;
         }
 
         //the first move
         if (movingDirection == null) {
             //if our instructions are empty we are done
             if (instructions.isEmpty()) {
-                return false;
+                trainCrashListener.onCrash();
             } else {
                 Direction d = instructions.remove();
                 if (checkDirection(d) > 0) {
@@ -129,7 +136,7 @@ public class Board {
                     move(train, d);
                 } else {
                     //todo: crash animation
-                    return false;
+                    trainCrashListener.onCrash();
                 }
             }
         }
@@ -138,20 +145,25 @@ public class Board {
             //check for turns
             if (conf.getMap()[currentPosition[1]][currentPosition[0]] > 1) {
                 //it's a turn
+                if (instructions.isEmpty()) {
+                    trainCrashListener.onCrash();
+                    return;
+                }
+
                 Direction d = instructions.remove();
                 if (checkDirection(d) > 0) {
                     move(train, d);
                 } else {
                     //todo: crash animation
-                    return false;
+                    trainCrashListener.onCrash();
                 }
-            } else {
-                //keep moving
+            } else if (checkDirection(movingDirection) > 0) {
+                //keep moving if we have the room
                 move(train, movingDirection);
+            } else {
+                trainCrashListener.onCrash();
             }
         }
-
-        return true;
     }
 
 
@@ -174,60 +186,38 @@ public class Board {
             anim.start();
         }
         else if (Direction.RIGHT.equals(movingDirection) && Direction.DOWN.equals(newDirection)){
-            movingDirection = newDirection;
-            AnimatorSet animationSet = new AnimatorSet();
-            animationSet.addListener(new AnimationListenerAdapter(){
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    nextMove(train);
-                }
-            });
 
             float x = train.getX();
             float y = train.getY();
 
             float[] valuesX = {x, x + BASE_TRAIN_SIZE/2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE)/2};
-            ObjectAnimator ax = ObjectAnimator.ofFloat(train, View.X, valuesX);
-            ax.setDuration(1500);
-
             float[] valuesY = {y, y + BASE_SQUARE_HEIGHTS/2};
-            ObjectAnimator ay = ObjectAnimator.ofFloat(train, View.Y, valuesY);
-            ay.setDuration(1500);
+            float[] rotation = { 0, 90f };
 
-            ObjectAnimator ar = ObjectAnimator.ofFloat(train, "rotation", 0, 90f);
-            ar.setDuration(1500);
+            turnAnimation (train, newDirection, valuesX, valuesY, rotation);
+        }
+        else if (Direction.RIGHT.equals(movingDirection) && Direction.UP.equals(newDirection)){
 
-            animationSet.play(ax).with(ay).with(ar);
-            animationSet.setInterpolator(new LinearInterpolator());
-            animationSet.start();
+            float x = train.getX();
+            float y = train.getY();
+
+            float[] valuesX = {x, x + BASE_TRAIN_SIZE/2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE)/2};
+            float[] valuesY = {y, y - BASE_SQUARE_HEIGHTS/2};
+            float[] rotation = { 0, -90f };
+
+            turnAnimation(train, newDirection, valuesX, valuesY, rotation);
+
         }
         else if (Direction.DOWN.equals(movingDirection) && Direction.RIGHT.equals(newDirection)){
-            movingDirection = newDirection;
-            AnimatorSet animationSet = new AnimatorSet();
-            animationSet.addListener(new AnimationListenerAdapter(){
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    nextMove(train);
-                }
-            });
 
             float x = train.getX();
             float y = train.getY();
 
             float[] valuesX = {x, x + BASE_TRAIN_SIZE/2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE)/2};
-            ObjectAnimator ax = ObjectAnimator.ofFloat(train, View.X, valuesX);
-            ax.setDuration(1500);
-
             float[] valuesY = {y, y + BASE_SQUARE_HEIGHTS/2};
-            ObjectAnimator ay = ObjectAnimator.ofFloat(train, View.Y, valuesY);
-            ay.setDuration(1500);
+            float[] rotation = { 90f, 0};
 
-            ObjectAnimator ar = ObjectAnimator.ofFloat(train, "rotation", 90f, 0);
-            ar.setDuration(1500);
-
-            animationSet.play(ax).with(ay).with(ar);
-            animationSet.setInterpolator(new LinearInterpolator());
-            animationSet.start();
+            turnAnimation(train, newDirection, valuesX, valuesY, rotation);
         }
         else if (Direction.DOWN.equals(movingDirection) && Direction.DOWN.equals(newDirection)){
 
@@ -243,6 +233,72 @@ public class Board {
             );
             anim.start();
         }
+        else if (Direction.UP.equals(movingDirection) && Direction.LEFT.equals(newDirection)){
+
+            float x = train.getX();
+            float y = train.getY();
+
+            float[] valuesX = {x, x - (BASE_TRAIN_SIZE / 2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE) / 2)};
+            float[] valuesY = {y, y - BASE_SQUARE_HEIGHTS / 2};
+            float[] rotation = {-90f, -180f};
+
+            turnAnimation(train, newDirection, valuesX, valuesY, rotation);
+        }
+        else if (Direction.UP.equals(movingDirection) && Direction.UP.equals(newDirection)){
+
+            ObjectAnimator anim = ObjectAnimator.ofFloat(train, View.Y, train.getY(), train.getY() - BASE_SQUARE_HEIGHTS);
+            anim.setInterpolator(new LinearInterpolator());
+            anim.setDuration(1500);
+            anim.addListener(new AnimationListenerAdapter() {
+                                 @Override
+                                 public void onAnimationEnd(Animator animation) {
+                                     nextMove(train);
+                                 }
+                             }
+            );
+            anim.start();
+        }
+        else if (Direction.LEFT.equals(movingDirection) && Direction.LEFT.equals(newDirection)){
+
+            ObjectAnimator anim = ObjectAnimator.ofFloat(train, View.X, train.getX(), train.getX() - BASE_SQUARE_WIDTH);
+            anim.setInterpolator(new LinearInterpolator());
+            anim.setDuration(1500);
+            anim.addListener(new AnimationListenerAdapter() {
+                                 @Override
+                                 public void onAnimationEnd(Animator animation) {
+                                     nextMove(train);
+                                 }
+                             }
+            );
+            anim.start();
+        }
+
+    }
+
+    private void turnAnimation(final ImageView train, Direction newDirection, float[] valuesX, float[] valuesY, float[] rotation) {
+
+        movingDirection = newDirection;
+
+        AnimatorSet animationSet = new AnimatorSet();
+        animationSet.addListener(new AnimationListenerAdapter(){
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                nextMove(train);
+            }
+        });
+
+        ObjectAnimator ax = ObjectAnimator.ofFloat(train, View.X, valuesX);
+        ax.setDuration(1500);
+
+        ObjectAnimator ay = ObjectAnimator.ofFloat(train, View.Y, valuesY);
+        ay.setDuration(1500);
+
+        ObjectAnimator ar = ObjectAnimator.ofFloat(train, "rotation", rotation[0], rotation[1]);
+        ar.setDuration(1500);
+
+        animationSet.play(ax).with(ay).with(ar);
+        animationSet.setInterpolator(new LinearInterpolator());
+        animationSet.start();
     }
 
     private int checkDirection(Direction d) {
