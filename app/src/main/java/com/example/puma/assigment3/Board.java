@@ -16,6 +16,8 @@ import java.util.Queue;
 
 import static com.example.puma.assigment3.BoardConfiguration.BASE_BORDER_HEIGHTS;
 import static com.example.puma.assigment3.BoardConfiguration.BASE_BORDER_WIDTH;
+import static com.example.puma.assigment3.BoardConfiguration.BASE_SCREEN_HEIGHTS;
+import static com.example.puma.assigment3.BoardConfiguration.BASE_SCREEN_WIDTH;
 import static com.example.puma.assigment3.BoardConfiguration.BASE_SQUARE_HEIGHTS;
 import static com.example.puma.assigment3.BoardConfiguration.BASE_SQUARE_WIDTH;
 import static com.example.puma.assigment3.BoardConfiguration.BASE_TRAIN_SIZE;
@@ -29,6 +31,8 @@ public class Board {
     private RelativeLayout workingArea;
     private int[] currentPosition;
 
+    private float scaleX = 1;
+    private float scaleY = 1;
 
     private Direction movingDirection = null;
     private Queue<Direction> instructions;
@@ -50,8 +54,8 @@ public class Board {
             @Override
             public void onGlobalLayout() {
                 workingAreaView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                size[0] = workingAreaView.getMeasuredWidth();
-                size[1] = workingAreaView.getMeasuredHeight();
+                scaleX = ((float)workingAreaView.getMeasuredWidth()) / BASE_SCREEN_WIDTH;
+                scaleY = ((float)workingAreaView.getMeasuredHeight()) / BASE_SCREEN_HEIGHTS;
             }
         });
 
@@ -96,24 +100,24 @@ public class Board {
     }
 
     private void showStartingPosition(ImageView train) {
-        //coordinates + size + orientation
 
         workingArea.removeView(train);
 
-        train.getLayoutParams().width = BASE_TRAIN_SIZE;
-        train.getLayoutParams().height = BASE_TRAIN_SIZE;
+
+        train.getLayoutParams().width = Math.round(BASE_TRAIN_SIZE * scaleX);
+        train.getLayoutParams().height = Math.round(BASE_TRAIN_SIZE * scaleY);
         train.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         currentPosition = Arrays.copyOf(conf.getStartingPosition(), 2);
 
         if (Direction.LEFT.equals(conf.getOrientation())){
             train.setRotation(-180f);
-            train.setX((currentPosition[0] +1) * BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE / 2 + BASE_BORDER_WIDTH);
-            train.setY(currentPosition[1] * BASE_SQUARE_HEIGHTS + BASE_BORDER_HEIGHTS);
+            train.setX(Math.round((currentPosition[0] + 1) * BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE / 2 + BASE_BORDER_WIDTH) * scaleX);
+            train.setY(Math.round((currentPosition[1] * BASE_SQUARE_HEIGHTS + BASE_BORDER_HEIGHTS) * scaleY));
         }
         if (Direction.RIGHT.equals(conf.getOrientation())) {
-            train.setX(currentPosition[0] * BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE / 2 + BASE_BORDER_WIDTH);
-            train.setY(currentPosition[1] * BASE_SQUARE_HEIGHTS + BASE_BORDER_HEIGHTS);
+            train.setX(Math.round((currentPosition[0] * BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE / 2 + BASE_BORDER_WIDTH) * scaleX));
+            train.setY(Math.round((currentPosition[1] * BASE_SQUARE_HEIGHTS + BASE_BORDER_HEIGHTS))*scaleY);
         }
 
         train.setVisibility(View.VISIBLE);
@@ -179,9 +183,11 @@ public class Board {
 
         updateCurrentPosition(newDirection);
         //movingDirection + newDirection defines a turn
+        int turnX = Math.round((BASE_TRAIN_SIZE / 2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE) / 2) * scaleX);
+        
         if (Direction.RIGHT.equals(movingDirection) && Direction.RIGHT.equals(newDirection)) {
 
-            ObjectAnimator anim = ObjectAnimator.ofFloat(train, View.X, train.getX(), train.getX() + BASE_SQUARE_WIDTH);
+            ObjectAnimator anim = ObjectAnimator.ofFloat(train, View.X, train.getX(), train.getX() + Math.round(BASE_SQUARE_WIDTH * scaleX));
             anim.setInterpolator(new LinearInterpolator());
             anim.setDuration(1500);
             anim.addListener(new AnimationListenerAdapter() {
@@ -198,8 +204,9 @@ public class Board {
             float x = train.getX();
             float y = train.getY();
 
-            float[] valuesX = {x, x + BASE_TRAIN_SIZE/2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE)/2};
-            float[] valuesY = {y, y + BASE_SQUARE_HEIGHTS/2};
+            
+            float[] valuesX = {x, x + turnX};
+            float[] valuesY = {y, y + Math.round( BASE_SQUARE_HEIGHTS/2 * scaleY) };
             float[] rotation = { 0, 90f };
 
             turnAnimation (train, newDirection, valuesX, valuesY, rotation);
@@ -209,8 +216,8 @@ public class Board {
             float x = train.getX();
             float y = train.getY();
 
-            float[] valuesX = {x, x + BASE_TRAIN_SIZE/2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE)/2};
-            float[] valuesY = {y, y - BASE_SQUARE_HEIGHTS/2};
+            float[] valuesX = {x, x + turnX};
+            float[] valuesY = {y, y - Math.round(BASE_SQUARE_HEIGHTS/2 * scaleX)};
             float[] rotation = { 0, -90f };
 
             turnAnimation(train, newDirection, valuesX, valuesY, rotation);
@@ -221,15 +228,15 @@ public class Board {
             float x = train.getX();
             float y = train.getY();
 
-            float[] valuesX = {x, x + BASE_TRAIN_SIZE/2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE)/2};
-            float[] valuesY = {y, y + BASE_SQUARE_HEIGHTS/2};
+            float[] valuesX = {x, x + turnX};
+            float[] valuesY = {y, y + Math.round(BASE_SQUARE_HEIGHTS/2 *scaleY)};
             float[] rotation = { 90f, 0};
 
             turnAnimation(train, newDirection, valuesX, valuesY, rotation);
         }
         else if (Direction.DOWN.equals(movingDirection) && Direction.DOWN.equals(newDirection)){
 
-            ObjectAnimator anim = ObjectAnimator.ofFloat(train, View.Y, train.getY(), train.getY() + BASE_SQUARE_HEIGHTS);
+            ObjectAnimator anim = ObjectAnimator.ofFloat(train, View.Y, train.getY(), train.getY() + Math.round(BASE_SQUARE_HEIGHTS * scaleY));
             anim.setInterpolator(new LinearInterpolator());
             anim.setDuration(1500);
             anim.addListener(new AnimationListenerAdapter() {
@@ -246,8 +253,8 @@ public class Board {
             float x = train.getX();
             float y = train.getY();
 
-            float[] valuesX = {x, x - (BASE_TRAIN_SIZE / 2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE) / 2)};
-            float[] valuesY = {y, y - BASE_SQUARE_HEIGHTS / 2};
+            float[] valuesX = {x, x - Math.round(((BASE_TRAIN_SIZE / 2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE) / 2)) * scaleX)};
+            float[] valuesY = {y, y - Math.round((BASE_SQUARE_HEIGHTS / 2) *scaleY)};
             float[] rotation = {-90f, -180f};
 
             turnAnimation(train, newDirection, valuesX, valuesY, rotation);
@@ -257,15 +264,15 @@ public class Board {
             float x = train.getX();
             float y = train.getY();
 
-            float[] valuesX = {x, x + (BASE_TRAIN_SIZE / 2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE) / 2)};
-            float[] valuesY = {y, y - BASE_SQUARE_HEIGHTS / 2};
+            float[] valuesX = {x, x + Math.round((BASE_TRAIN_SIZE / 2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE) / 2)*scaleX)};
+            float[] valuesY = {y, y - Math.round(BASE_SQUARE_HEIGHTS / 2 * scaleY)};
             float[] rotation = {-90f, 0};
 
             turnAnimation(train, newDirection, valuesX, valuesY, rotation);
         }
         else if (Direction.UP.equals(movingDirection) && Direction.UP.equals(newDirection)){
 
-            ObjectAnimator anim = ObjectAnimator.ofFloat(train, View.Y, train.getY(), train.getY() - BASE_SQUARE_HEIGHTS);
+            ObjectAnimator anim = ObjectAnimator.ofFloat(train, View.Y, train.getY(), train.getY() - Math.round(BASE_SQUARE_HEIGHTS * scaleY));
             anim.setInterpolator(new LinearInterpolator());
             anim.setDuration(1500);
             anim.addListener(new AnimationListenerAdapter() {
@@ -279,7 +286,7 @@ public class Board {
         }
         else if (Direction.LEFT.equals(movingDirection) && Direction.LEFT.equals(newDirection)){
 
-            ObjectAnimator anim = ObjectAnimator.ofFloat(train, View.X, train.getX(), train.getX() - BASE_SQUARE_WIDTH);
+            ObjectAnimator anim = ObjectAnimator.ofFloat(train, View.X, train.getX(), train.getX() - Math.round(BASE_SQUARE_WIDTH * scaleX));
             anim.setInterpolator(new LinearInterpolator());
             anim.setDuration(1500);
             anim.addListener(new AnimationListenerAdapter() {
@@ -296,8 +303,8 @@ public class Board {
             float x = train.getX();
             float y = train.getY();
 
-            float[] valuesX = {x, x - (BASE_TRAIN_SIZE / 2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE) / 2)};
-            float[] valuesY = {y, y - BASE_SQUARE_HEIGHTS / 2};
+            float[] valuesX = {x, x - Math.round((BASE_TRAIN_SIZE / 2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE) / 2) * scaleX)};
+            float[] valuesY = {y, y - Math.round(BASE_SQUARE_HEIGHTS / 2 * scaleY)};
             float[] rotation = {-180f, -90f};
 
             turnAnimation(train, newDirection, valuesX, valuesY, rotation);
@@ -307,8 +314,8 @@ public class Board {
             float x = train.getX();
             float y = train.getY();
 
-            float[] valuesX = {x, x - (BASE_TRAIN_SIZE / 2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE) / 2)};
-            float[] valuesY = {y, y + BASE_SQUARE_HEIGHTS / 2};
+            float[] valuesX = {x, x - Math.round((BASE_TRAIN_SIZE / 2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE) / 2) * scaleX)};
+            float[] valuesY = {y, y + Math.round(BASE_SQUARE_HEIGHTS / 2 * scaleY)};
             float[] rotation = {-180f, -270f};
 
             turnAnimation(train, newDirection, valuesX, valuesY, rotation);
@@ -392,52 +399,5 @@ public class Board {
                 break;
         }
     }
-
-    /*
-    //temp
-    private void moveRight2(final ImageView train){
-        ObjectAnimator anim = ObjectAnimator.ofFloat( train, View.X, train.getX(), train.getX() + BASE_SQUARE_WIDTH );
-        anim.setInterpolator(new LinearInterpolator());
-        anim.setDuration(1500);
-        anim.addListener(new AnimationListenerAdapter() {
-                             @Override
-                             public void onAnimationEnd(Animator animation) {
-                                 turn3(train);
-                             }
-                         }
-        );
-        anim.start();
-    }
-
-    //temp
-    private void turn3(final ImageView train) {
-
-        AnimatorSet animationSet = new AnimatorSet();
-        animationSet.addListener(new AnimationListenerAdapter(){
-            @Override
-            public void onAnimationEnd(Animator animation) {
-            }
-        });
-
-        float x = train.getX();
-        float y = train.getY();
-
-        float[] valuesX = {x, x + BASE_TRAIN_SIZE/2 + (BASE_SQUARE_WIDTH - BASE_TRAIN_SIZE)/2};
-        ObjectAnimator ax = ObjectAnimator.ofFloat(train, View.X, valuesX);
-        ax.setDuration(1500);
-
-        float[] valuesY = {y, y + BASE_SQUARE_HEIGHTS/2};
-        ObjectAnimator ay = ObjectAnimator.ofFloat(train, View.Y, valuesY);
-        ay.setDuration(1500);
-
-        ObjectAnimator ar = ObjectAnimator.ofFloat(train, "rotation", 0, 90f);
-        ar.setDuration(1500);
-
-        animationSet.play(ax).with(ay).with(ar);
-        animationSet.setInterpolator(new LinearInterpolator());
-        animationSet.start();
-    }
-
-    */
-
+    
 }
